@@ -125,22 +125,17 @@
         document.getElementById("container").innerHTML = html;
 
         
-        //await fatotal();
+        await fatotal();
         
         document.querySelectorAll('input').forEach(item => {
             item.addEventListener("input", function(event) {
                 fatotal();
             });
-            /*item.addEventListener("change", function(event) {
-                fatotal();
-            });*/
+            
             item.addEventListener("focus", function(event) {
                 event.target.select();
             });
         });
-
-        
-        
     }
     async function fatotal(){
 
@@ -151,7 +146,6 @@
         let inLocValue;
         let altLocValue;
         let totalValue;
-
 
         arrayTotal.reduce((acc, item, index) => {
             inlocValue = parseFloat(formatToFourDecimals(arrayInloc[index].value)) || 0;
@@ -166,7 +160,6 @@
 
         let arrayInLocSiblings;
         let arrayAltLocSiblings;
-
 
         arrayInloc.filter(item => item.dataset.parent > 0).forEach(item => {
             parentInLocInput = document.querySelector(`input[data-column="inloc"][data-row="row${item.dataset.parent}"]`);
