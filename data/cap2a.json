@@ -1,7 +1,7 @@
 [
-    {"cod": 1, "descriere": "Teren arabil (inclusiv sere și solarii)", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 1, "descriere": "Teren arabil (inclusiv sere și solarii)", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": 2.1432, "outloc": "0", "tot": "0"},
     {"cod": 2, "descriere": "Pășuni naturale", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
-    {"cod": 3, "descriere": "Fânețe naturale", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 3, "descriere": "Fânețe naturale", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0.2000", "outloc": "0", "tot": "0"},
     {"cod": 4, "descriere": "Vii, pepiniere viticole și hameiști", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
     {"cod": 5, "descriere": "din care: - vii pe rod", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
     {"cod": 6, "descriere": "- hameiști (total)", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
