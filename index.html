@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my grid</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 8px;
+        font-family: Arial, sans-serif;
+        background: #f5f7fa;
+        font-size: 14px;
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: 55px 1fr 120px 120px 120px;
+        border: 1px solid #d6dbe1;
+        background: white;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .item {
+        padding: 4px 6px;
+        border-bottom: 1px solid #e5e9ef;
+        border-right: 1px solid #e5e9ef;
+        display: flex;
+        align-items: center;
+        min-height: 32px;
+        font-size: 14px;
+    }
+
+    .header {
+        background: #2f5d8c;
+        color: white;
+        font-weight: bold;
+        justify-content: center;
+        min-height: 34px;
+    }
+
+    .cod {
+        justify-content: center;
+        font-weight: bold;
+        background: #fafafa;
+    }
+
+    .descriere {
+        font-weight: 500;
+    }
+
+    .numeric {
+        justify-content: center;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        height: 24px;
+        padding: 2px 4px;
+        border: 1px solid #c8d0da;
+        border-radius: 2px;
+        font-size: 14px;
+        text-align: right;
+        background: #fcfcfc;
+        user-select: text;
+    }
+
+    input[type="number"]:focus {
+        outline: none;
+        border-color: #2f5d8c;
+        background: white;
+        box-shadow: 0 0 0 1px rgba(47,93,140,0.15);
+    }
+</style>
+</head>
+<body>
+    <div class="container" id="container"></div>
+    <script>
+
+        async function getData() {
+            const url = "data/cap2a.json";
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                return result = await response.json();
+                
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        
+
+    async function setHtml() {
+        let data = await getData();   
+        let html = "";
+        data.forEach(item => {
+            //console.log(item.cod_parinte);
+            
+            html += `
+                
+                    <div class="item" data-row="row${item.cod}" data-column="cod">${item.cod}</div>
+                    <div class="item" data-row="row${item.cod}" data-column="descriere">${item.descriere} ${item.formula}</div>
+                    <div class="item">
+                        <input type="number" data-row="row${item.cod}" data-column="inloc" data-parent="${item.cod_parinte}" id="inloc${item.cod}" value="${item.inloc || 0}" />    
+                    </div>
+                    <div class="item">
+                        <input type="number" data-row="row${item.cod}" data-column="altloc" data-parent="${item.cod_parinte}" id="altloc${item.cod}" value="${item.altloc || 0}" />
+                    </div>
+                    <div class="item">
+                        <input type="number" data-row="row${item.cod}" data-column="total" data-parent="${item.cod_parinte}" id="total${item.cod}" value="${item.total || 0}" />
+                    </div>
+            `;
+        });
+        document.getElementById("container").innerHTML = html;
+
+        
+        //await fatotal();
+        
+        document.querySelectorAll('input').forEach(item => {
+            item.addEventListener("input", function(event) {
+                fatotal();
+            });
+            /*item.addEventListener("change", function(event) {
+                fatotal();
+            });*/
+            item.addEventListener("focus", function(event) {
+                event.target.select();
+            });
+        });
+
+        
+        
+    }
+    async function fatotal(){
+
+        let arrayInloc = Array.from(document.querySelectorAll("input[data-column='inloc']"));
+        let arrayAltLoc = Array.from(document.querySelectorAll("input[data-column='altloc']"));
+        let arrayTotal = Array.from(document.querySelectorAll("input[data-column='total']"));
+
+        let inLocValue;
+        let altLocValue;
+        let totalValue;
+
+
+        arrayTotal.reduce((acc, item, index) => {
+            inlocValue = parseFloat(formatToFourDecimals(arrayInloc[index].value)) || 0;
+            altLocValue = parseFloat(formatToFourDecimals(arrayAltLoc[index].value)) || 0;
+            totalValue = inlocValue + altLocValue;
+            item.value = totalValue.toFixed(4);
+        }, 0);
+
+        let parentInLocInput;
+        let parentAltLocInput;
+        let parentTotalInput;
+
+        let arrayInLocSiblings;
+        let arrayAltLocSiblings;
+
+
+        arrayInloc.filter(item => item.dataset.parent > 0).forEach(item => {
+            parentInLocInput = document.querySelector(`input[data-column="inloc"][data-row="row${item.dataset.parent}"]`);
+            parentAltLocInput = document.querySelector(`input[data-column="altloc"][data-row="row${item.dataset.parent}"]`);
+            parentTotalInput = document.querySelector(`input[data-column="total"][data-row="row${item.dataset.parent}"]`);
+
+            arrayInLocSiblings = arrayInloc.filter(sibling => sibling.dataset.parent == item.dataset.parent && sibling.dataset.parent > 0);
+            console.log(`Siblings for parent ${item.dataset.parent}:`, arrayInLocSiblings);
+            let inlocTotal = arrayInLocSiblings.reduce((sum, sibling) => {
+                let value = parseFloat(formatToFourDecimals(sibling.value)) || 0;
+                return sum + value;
+            }, 0);
+
+            arrayAltLocSiblings = arrayAltLoc.filter(sibling => sibling.dataset.parent == item.dataset.parent && sibling.dataset.parent > 0);
+            console.log(`Siblings for parent ${item.dataset.parent}:`, arrayAltLocSiblings);
+            let altlocTotal = arrayAltLocSiblings.reduce((sum, sibling) => {
+                let value = parseFloat(formatToFourDecimals(sibling.value)) || 0;
+                return sum + value;
+            }, 0);
+
+            parentInLocInput.value = inlocTotal.toFixed(4) || 0;
+            parentAltLocInput.value = altlocTotal.toFixed(4) || 0;
+
+                let parentTotalValue = parseFloat(parentInLocInput.value) + parseFloat(parentAltLocInput.value);
+                parentTotalInput.value = parentTotalValue.toFixed(4) || 0;
+        });
+    }
+
+    function formatToFourDecimals(num) {
+        num = String(num);
+        let match = num.match(/^\d+\.0*\d{0,4}/);
+        if (match) {
+            return match[0];
+        }
+        return num;
+    }
+
+        async function main(){
+            await setHtml(await getData());
+        }
+        main();
+        
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</body>
+</html>

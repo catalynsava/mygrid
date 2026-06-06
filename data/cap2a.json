@@ -1,0 +1,22 @@
+[
+    {"cod": 1, "descriere": "Teren arabil (inclusiv sere și solarii)", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 2, "descriere": "Pășuni naturale", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 3, "descriere": "Fânețe naturale", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 4, "descriere": "Vii, pepiniere viticole și hameiști", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 5, "descriere": "din care: - vii pe rod", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 6, "descriere": "- hameiști (total)", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 7, "descriere": "Livezi de pomi, pepiniere pomicole, arbuști fructiferi", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 8, "descriere": "din care: - livezi pe rod", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 9, "descriere": "Grădini familiale", "formula": "", "cod_parinte": 10, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 10, "descriere": "Teren agricol - total", "formula": "(01+02+03+04+07+09)", "cod_parinte": 20, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 11, "descriere": "Păduri și alte terenuri cu vegetație forestieră", "formula": "", "cod_parinte": "19", "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 12, "descriere": "din care: păduri", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 13, "descriere": "Drumuri și căi ferate", "formula": "", "cod_parinte": "19", "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 14, "descriere": "Construcții", "formula": "", "cod_parinte": "19", "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 15, "descriere": "Terenuri degradate și neproductive", "formula": "", "cod_parinte": "19", "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 16, "descriere": "Ape și bălți", "formula": "", "cod_parinte": "19", "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 17, "descriere": "terenuri piscicole utilizate în scop piscicol", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 18, "descriere": "terenuri piscicole utilizate în scop agricol", "formula": "", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 19, "descriere": "Teren neagricol total", "formula": "(11+13+14+15+16)", "cod_parinte": 20, "semn": "+", "inloc": "0", "outloc": "0", "tot": "0"},
+    {"cod": 20, "descriere": "Suprafața totală ", "formula": "(10+19)", "cod_parinte": 0, "semn": "", "inloc": "0", "outloc": "0", "tot": "0"}
+]
