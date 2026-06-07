@@ -112,13 +112,13 @@
                     <div class="item" data-row="row${item.cod}" data-column="cod">${item.cod}</div>
                     <div class="item" data-row="row${item.cod}" data-column="descriere">${item.descriere} ${item.formula}</div>
                     <div class="item">
-                        <input type="number" data-row="row${item.cod}" data-column="inloc" data-parent="${item.cod_parinte}" id="inloc${item.cod}" value="${item.inloc || 0}" />    
+                        <input type="number" data-row="row${item.cod}" data-column="inloc" data-parent="${item.cod_parinte}" data-sign="${item.semn}"  id="inloc${item.cod}" value="${item.inloc || 0}" />    
                     </div>
                     <div class="item">
-                        <input type="number" data-row="row${item.cod}" data-column="altloc" data-parent="${item.cod_parinte}" id="altloc${item.cod}" value="${item.altloc || 0}" />
+                        <input type="number" data-row="row${item.cod}" data-column="altloc" data-parent="${item.cod_parinte}" data-sign="${item.semn}" id="altloc${item.cod}" value="${item.altloc || 0}" />
                     </div>
                     <div class="item">
-                        <input type="number" data-row="row${item.cod}" data-column="total" data-parent="${item.cod_parinte}" id="total${item.cod}" value="${item.total || 0}" />
+                        <input type="number" data-row="row${item.cod}" data-column="total" data-parent="${item.cod_parinte}" data-sign="${item.semn}" id="total${item.cod}" value="${item.total || 0}" />
                     </div>
             `;
         });
@@ -170,6 +170,9 @@
             console.log(`Siblings for parent ${item.dataset.parent}:`, arrayInLocSiblings);
             let inlocTotal = arrayInLocSiblings.reduce((sum, sibling) => {
                 let value = parseFloat(formatToFourDecimals(sibling.value)) || 0;
+                if (sibling.dataset.sign === "-") {
+                    value = -value;
+                }
                 return sum + value;
             }, 0);
 
@@ -177,6 +180,9 @@
             console.log(`Siblings for parent ${item.dataset.parent}:`, arrayAltLocSiblings);
             let altlocTotal = arrayAltLocSiblings.reduce((sum, sibling) => {
                 let value = parseFloat(formatToFourDecimals(sibling.value)) || 0;
+                if (sibling.dataset.sign === "-") {
+                    value = -value;
+                }
                 return sum + value;
             }, 0);
 
