@@ -78,6 +78,9 @@
         background: white;
         box-shadow: 0 0 0 1px rgba(47,93,140,0.15);
     }
+    .modified {
+        font-weight: bold;
+    }
 </style>
 </head>
 <body>
@@ -85,7 +88,7 @@
     <script>
 
         async function getData() {
-            const url = "data/cap2a.json";
+            const url = "data/capitol_2a.json";
             try {
                 const response = await fetch(url);
                 if (!response.ok) {
@@ -112,10 +115,10 @@
                     <div class="item" data-row="row${item.cod}" data-column="cod">${item.cod}</div>
                     <div class="item" data-row="row${item.cod}" data-column="descriere">${item.descriere} ${item.formula}</div>
                     <div class="item">
-                        <input type="number" data-row="row${item.cod}" data-column="inloc" data-parent="${item.cod_parinte}" data-sign="${item.semn}"  id="inloc${item.cod}" value="${item.inloc || 0}" />    
+                        <input type="number" data-row="row${item.cod}" data-column="inloc" data-parent="${item.cod_parinte}" data-sign="${item.semn}"  id="inloc${item.cod}" value="${item.in_localitate || 0}" />    
                     </div>
                     <div class="item">
-                        <input type="number" data-row="row${item.cod}" data-column="altloc" data-parent="${item.cod_parinte}" data-sign="${item.semn}" id="altloc${item.cod}" value="${item.altloc || 0}" />
+                        <input type="number" data-row="row${item.cod}" data-column="altloc" data-parent="${item.cod_parinte}" data-sign="${item.semn}" id="altloc${item.cod}" value="${item.alta_localitate || 0}" />
                     </div>
                     <div class="item">
                         <input type="number" data-row="row${item.cod}" data-column="total" data-parent="${item.cod_parinte}" data-sign="${item.semn}" id="total${item.cod}" value="${item.total || 0}" />
@@ -130,6 +133,18 @@
         document.querySelectorAll('input').forEach(item => {
             item.addEventListener("input", function(event) {
                 fatotal();
+
+                const descriere = document.querySelector(
+                    `div[data-row="${item.dataset.row}"][data-column="descriere"]`
+                );
+                if (!descriere) return;
+
+                if (item.value !== item.dataset.initialValue) {
+                    descriere.classList.add('modified');
+                } else {
+                    descriere.classList.remove('modified');
+                }
+
             });
             
             item.addEventListener("focus", function(event) {
@@ -189,7 +204,7 @@
             parentInLocInput.value = inlocTotal.toFixed(4) || 0;
             parentAltLocInput.value = altlocTotal.toFixed(4) || 0;
 
-                let parentTotalValue = parseFloat(parentInLocInput.value) + parseFloat(parentAltLocInput.value);
+                let parentTotalValue = parseFloat(parentInLocInput.value) + parseFloat(parentAltLocInput.value) || 0;
                 parentTotalInput.value = parentTotalValue.toFixed(4) || 0;
         });
     }
