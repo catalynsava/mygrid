@@ -10,5 +10,5 @@ SELECT
  FROM capitol_2a 
    INNER JOIN adrese_roluri
     ON capitol_2a.id = adrese_roluri.id AND adrese_roluri.id = '0002732d-2dce-432b-b22a-62c89fbda14b'
- 	RIGHT JOIN cfg_capitol_2a
-	 ON capitol_2a.cod = cfg_capitol_2a.cod;
+ RIGHT JOIN cfg_capitol_2a
+	ON capitol_2a.cod = cfg_capitol_2a.cod;
