@@ -85,6 +85,7 @@
 </head>
 <body>
     <div class="container" id="container"></div>
+    <button id="saveBtn" class="btn btn-primary mt-3">Save</button>
     <script>
 
         async function getData() {
@@ -126,89 +127,104 @@
             `;
         });
         document.getElementById("container").innerHTML = html;
-
         
-        await fatotal();
-        
-        document.querySelectorAll('input').forEach(item => {
-            item.addEventListener("input", function(event) {
-                fatotal();
-
-                const descriere = document.querySelector(
-                    `div[data-row="${item.dataset.row}"][data-column="descriere"]`
-                );
-                if (!descriere) return;
-
-                if (item.value !== item.dataset.initialValue) {
-                    descriere.classList.add('modified');
-                } else {
-                    descriere.classList.remove('modified');
-                }
-
-            });
-            
-            item.addEventListener("focus", function(event) {
-                event.target.select();
-            });
+        document.addEventListener("input", e => {
+            if (!e.target.matches("input[data-column='inloc'], input[data-column='altloc']")) {
+                return;
+            }
+             
+            calculeazaRand(e.target.dataset.row);
+            calculeazaParinte(e.target.dataset.parent);
         });
+        document.addEventListener("click", e => {
+            if (!e.target.matches("#saveBtn")) {
+                return;
+            }
+            saveData();
+        });  
     }
-    async function fatotal(){
-
-        let arrayInloc = Array.from(document.querySelectorAll("input[data-column='inloc']"));
-        let arrayAltLoc = Array.from(document.querySelectorAll("input[data-column='altloc']"));
-        let arrayTotal = Array.from(document.querySelectorAll("input[data-column='total']"));
-
-        let inLocValue;
-        let altLocValue;
-        let totalValue;
-
-        arrayTotal.reduce((acc, item, index) => {
-            inlocValue = parseFloat(formatToFourDecimals(arrayInloc[index].value)) || 0;
-            altLocValue = parseFloat(formatToFourDecimals(arrayAltLoc[index].value)) || 0;
-            totalValue = inlocValue + altLocValue;
-            item.value = totalValue.toFixed(4);
-        }, 0);
-
-        let parentInLocInput;
-        let parentAltLocInput;
-        let parentTotalInput;
-
-        let arrayInLocSiblings;
-        let arrayAltLocSiblings;
-
-        arrayInloc.filter(item => item.dataset.parent > 0).forEach(item => {
-            parentInLocInput = document.querySelector(`input[data-column="inloc"][data-row="row${item.dataset.parent}"]`);
-            parentAltLocInput = document.querySelector(`input[data-column="altloc"][data-row="row${item.dataset.parent}"]`);
-            parentTotalInput = document.querySelector(`input[data-column="total"][data-row="row${item.dataset.parent}"]`);
-
-            arrayInLocSiblings = arrayInloc.filter(sibling => sibling.dataset.parent == item.dataset.parent && sibling.dataset.parent > 0);
-            console.log(`Siblings for parent ${item.dataset.parent}:`, arrayInLocSiblings);
-            let inlocTotal = arrayInLocSiblings.reduce((sum, sibling) => {
-                let value = parseFloat(formatToFourDecimals(sibling.value)) || 0;
-                if (sibling.dataset.sign === "-") {
-                    value = -value;
-                }
-                return sum + value;
-            }, 0);
-
-            arrayAltLocSiblings = arrayAltLoc.filter(sibling => sibling.dataset.parent == item.dataset.parent && sibling.dataset.parent > 0);
-            console.log(`Siblings for parent ${item.dataset.parent}:`, arrayAltLocSiblings);
-            let altlocTotal = arrayAltLocSiblings.reduce((sum, sibling) => {
-                let value = parseFloat(formatToFourDecimals(sibling.value)) || 0;
-                if (sibling.dataset.sign === "-") {
-                    value = -value;
-                }
-                return sum + value;
-            }, 0);
-
-            parentInLocInput.value = inlocTotal.toFixed(4) || 0;
-            parentAltLocInput.value = altlocTotal.toFixed(4) || 0;
-
-                let parentTotalValue = parseFloat(parentInLocInput.value) + parseFloat(parentAltLocInput.value) || 0;
-                parentTotalInput.value = parentTotalValue.toFixed(4) || 0;
+    function saveData() {
+        const rows = [...new Set(
+            [...document.querySelectorAll("input[data-row]")]
+                .filter(input => parseFloat(input.value) !== 0)
+                .map(input => input.dataset.row)
+        )];
+        
+        const data = rows.map(row => {
+            const rowInputs = document.querySelectorAll(
+                `input[data-row="${row}"]`
+            );
+            const obj = { row };
+            rowInputs.forEach(input => {
+                obj[input.dataset.column] = input.value;
+            });
+            return obj;
         });
+
+        console.log(JSON.stringify(data));
     }
 
+    function calculeazaRand(row) {
+        const inloc = document.querySelector(
+            `input[data-row="${row}"][data-column="inloc"]`
+        );
+        const altloc = document.querySelector(
+            `input[data-row="${row}"][data-column="altloc"]`
+        );
+        const total = document.querySelector(
+            `input[data-row="${row}"][data-column="total"]`
+        );
+        total.value =
+            ((parseFloat(inloc.value) || 0) +
+            (parseFloat(altloc.value) || 0))
+            .toFixed(4);
+    }
+
+    function calculeazaParinte(parent) {
+
+        if (!parent || parent == 0) return;
+
+        const copiiInloc = document.querySelectorAll(
+            `input[data-column="inloc"][data-parent="${parent}"]`
+        );
+
+        const copiiAltloc = document.querySelectorAll(
+            `input[data-column="altloc"][data-parent="${parent}"]`
+        );
+
+        let totalInloc = 0;
+        let totalAltloc = 0;
+
+        copiiInloc.forEach(item => {
+            let val = parseFloat(item.value) || 0;
+            totalInloc += item.dataset.sign === "-" ? -val : val;
+        });
+
+        copiiAltloc.forEach(item => {
+            let val = parseFloat(item.value) || 0;
+            totalAltloc += item.dataset.sign === "-" ? -val : val;
+        });
+
+        const parentInloc = document.querySelector(
+            `input[data-row="row${parent}"][data-column="inloc"]`
+        );
+
+        const parentAltloc = document.querySelector(
+            `input[data-row="row${parent}"][data-column="altloc"]`
+        );
+
+        const parentTotal = document.querySelector(
+            `input[data-row="row${parent}"][data-column="total"]`
+        );
+
+        parentInloc.value = totalInloc.toFixed(4);
+        parentAltloc.value = totalAltloc.toFixed(4);
+        parentTotal.value = (totalInloc + totalAltloc).toFixed(4);
+
+        // dacă părintele are și el părinte
+        calculeazaParinte(parentInloc.dataset.parent);
+    }
+    
     function formatToFourDecimals(num) {
         num = String(num);
         let match = num.match(/^\d+\.0*\d{0,4}/);
